@@ -15,12 +15,14 @@
   --ink-light:  #3a2516;
   --ink-fade:   #6b5035;
   --ink-faint:  #a88a60;
+  --red-ink:    #8b1a1a;
   --line-blue:  rgba(100,130,200,0.13);
   --margin-red: rgba(190,50,35,0.25);
   --cover:      #2e1e14;
   --cover2:     #3d2a1c;
   --gold:       #b8943a;
   --gold-light: #d4af5a;
+  --line-h:     32px; /* ruled line height */
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
@@ -66,7 +68,6 @@ body {
     inset 2px 1px 8px rgba(255,200,100,.05);
   position: relative; overflow: hidden;
 }
-
 .book-spine {
   position: absolute; left: 0; top: 0; bottom: 0; width: 22px;
   background: linear-gradient(90deg, #0a0603, #1a0e08, #0f0805);
@@ -78,7 +79,6 @@ body {
   font-family: 'Pinyon Script', cursive; font-size: 11px;
   color: rgba(180,140,50,.45); white-space: nowrap; letter-spacing: .25em;
 }
-
 .corner { position: absolute; width: 22px; height: 22px; border-color: var(--gold); border-style: solid; opacity: .45; }
 .corner.tl { top:12px; left:28px; border-width:2px 0 0 2px; }
 .corner.tr { top:12px; right:12px; border-width:2px 2px 0 0; }
@@ -86,7 +86,6 @@ body {
 .corner.br { bottom:12px; right:12px; border-width:0 2px 2px 0; }
 
 .book-inner { padding: 22px 18px 22px 36px; }
-
 .book-header {
   text-align: center; margin-bottom: 16px; padding-bottom: 12px;
   border-bottom: 1px solid rgba(180,140,50,.25); position: relative;
@@ -117,13 +116,11 @@ body {
   color: var(--gold-light); text-align: center; flex: 1;
   text-shadow: 0 1px 4px rgba(0,0,0,.4);
 }
-
 .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 4px; }
 .cal-weekday {
   text-align: center; font-size: 8px; letter-spacing: .15em;
   color: rgba(180,140,50,.38); text-transform: uppercase; padding: 3px 0;
 }
-
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
 .cal-day {
   aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
@@ -146,13 +143,11 @@ body {
   color: #fff8e0; transform: scale(1.1);
   box-shadow: 0 2px 14px rgba(180,140,50,.22);
 }
-
 .book-footer {
   margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(180,140,50,.15);
   text-align: center; font-size: 9px; letter-spacing: .35em;
   color: rgba(180,140,50,.26); text-transform: uppercase;
 }
-
 .rings {
   position: absolute; left: -8px; top: 0; bottom: 0; width: 16px;
   pointer-events: none;
@@ -166,18 +161,16 @@ body {
 
 /* ── PAGE VIEW ── */
 #pageView {
-  display: none; min-height: 100vh; align-items: flex-start;
+  min-height: 100vh; align-items: flex-start;
   justify-content: center; padding: 20px 0 80px;
   background:
     radial-gradient(ellipse at 30% 20%, rgba(60,35,15,.6) 0%, transparent 55%),
     radial-gradient(ellipse at 75% 80%, rgba(40,20,5,.7) 0%, transparent 55%),
     #140e09;
 }
-/* pageView controlled via JS inline style */
 
 .page-wrap { width: 100%; max-width: 680px; position: relative; }
 
-/* Back button row */
 .page-topbar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 16px 14px;
@@ -191,34 +184,20 @@ body {
 }
 .back-btn:hover, .back-btn:active { color: var(--gold-light); }
 .back-btn::before { content: '←'; font-size: 14px; }
-
 .entry-counter {
   font-family: 'IM Fell English', serif; font-size: 10px;
   color: rgba(180,140,50,.35); letter-spacing: .18em; text-transform: uppercase;
 }
 
-/* Page flip container */
-.page-flip-scene {
-  position: relative;
-  perspective: 2400px;
-  overflow: hidden;
-}
+.page-flip-scene { position: relative; perspective: 2400px; overflow: hidden; }
 
-/* Stacked pages effect */
 .page-stack::before, .page-stack::after {
-  content: ''; position: absolute; inset: 0;
-  border-radius: 1px 4px 4px 1px;
+  content: ''; position: absolute; inset: 0; border-radius: 1px 4px 4px 1px;
 }
-.page-stack::before {
-  transform: rotate(.7deg) translate(4px, 3px); z-index: 0;
-  background: #ede8d8; box-shadow: 1px 1px 6px rgba(0,0,0,.2);
-}
-.page-stack::after {
-  transform: rotate(-.4deg) translate(2px, 1px); z-index: 1;
-  background: #f0ead8; box-shadow: 1px 1px 5px rgba(0,0,0,.15);
-}
+.page-stack::before { transform: rotate(.7deg) translate(4px, 3px); z-index: 0; background: #ede8d8; box-shadow: 1px 1px 6px rgba(0,0,0,.2); }
+.page-stack::after  { transform: rotate(-.4deg) translate(2px, 1px); z-index: 1; background: #f0ead8; box-shadow: 1px 1px 5px rgba(0,0,0,.15); }
 
-/* Main notebook page */
+/* ── NOTEBOOK PAGE ── */
 .notebook-page {
   position: relative; z-index: 2;
   background: var(--paper);
@@ -231,101 +210,78 @@ body {
   padding: 48px 36px 72px 74px;
   min-height: 80vh;
   overflow: hidden;
-  /* Ruled lines + margin */
   background-image:
     linear-gradient(90deg, transparent 62px, var(--margin-red) 62px, var(--margin-red) 64px, transparent 64px),
-    repeating-linear-gradient(transparent, transparent 31px, var(--line-blue) 31px, var(--line-blue) 32px);
+    repeating-linear-gradient(transparent, transparent calc(var(--line-h) - 1px), var(--line-blue) calc(var(--line-h) - 1px), var(--line-blue) var(--line-h));
   background-color: var(--paper);
   transform-origin: center center;
 }
 
-/* Flip animations */
-@keyframes pageFlipOut {
-  0%   { transform: perspective(2400px) rotateY(0deg) scale(1); }
-  100% { transform: perspective(2400px) rotateY(-90deg) scale(0.96); }
-}
-@keyframes pageFlipIn {
-  0%   { transform: perspective(2400px) rotateY(90deg) scale(0.96); }
-  100% { transform: perspective(2400px) rotateY(0deg) scale(1); }
-}
-@keyframes pageFlipOutBack {
-  0%   { transform: perspective(2400px) rotateY(0deg) scale(1); }
-  100% { transform: perspective(2400px) rotateY(90deg) scale(0.96); }
-}
-@keyframes pageFlipInBack {
-  0%   { transform: perspective(2400px) rotateY(-90deg) scale(0.96); }
-  100% { transform: perspective(2400px) rotateY(0deg) scale(1); }
-}
-.notebook-page.flip-out-fwd  { animation: pageFlipOut  0.28s ease-in  forwards; }
-.notebook-page.flip-in-fwd   { animation: pageFlipIn   0.28s ease-out forwards; }
-.notebook-page.flip-out-back { animation: pageFlipOutBack 0.28s ease-in  forwards; }
-.notebook-page.flip-in-back  { animation: pageFlipInBack  0.28s ease-out forwards; }
+/* flip animations */
+@keyframes pageFlipOut     { 0%{transform:perspective(2400px) rotateY(0) scale(1);}    100%{transform:perspective(2400px) rotateY(-90deg) scale(.96);} }
+@keyframes pageFlipIn      { 0%{transform:perspective(2400px) rotateY(90deg) scale(.96);} 100%{transform:perspective(2400px) rotateY(0) scale(1);} }
+@keyframes pageFlipOutBack { 0%{transform:perspective(2400px) rotateY(0) scale(1);}    100%{transform:perspective(2400px) rotateY(90deg) scale(.96);} }
+@keyframes pageFlipInBack  { 0%{transform:perspective(2400px) rotateY(-90deg) scale(.96);}100%{transform:perspective(2400px) rotateY(0) scale(1);} }
+.notebook-page.flip-out-fwd  { animation: pageFlipOut     .28s ease-in  forwards; }
+.notebook-page.flip-in-fwd   { animation: pageFlipIn      .28s ease-out forwards; }
+.notebook-page.flip-out-back { animation: pageFlipOutBack .28s ease-in  forwards; }
+.notebook-page.flip-in-back  { animation: pageFlipInBack  .28s ease-out forwards; }
 
-/* Torn top edge */
+/* torn top */
 .notebook-page::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
   background: var(--paper-edge);
-  clip-path: polygon(
-    0% 0%,1.5% 100%,3% 20%,5% 80%,7% 15%,10% 65%,13% 30%,16% 85%,
-    19% 20%,22% 70%,25% 40%,28% 90%,31% 25%,34% 60%,37% 15%,40% 55%,
-    43% 80%,46% 35%,49% 70%,52% 25%,55% 60%,58% 40%,61% 75%,64% 25%,
-    67% 65%,70% 35%,73% 70%,76% 20%,79% 55%,82% 40%,85% 65%,88% 30%,
-    91% 60%,94% 15%,97% 50%,100% 0%
-  );
+  clip-path: polygon(0% 0%,1.5% 100%,3% 20%,5% 80%,7% 15%,10% 65%,13% 30%,16% 85%,19% 20%,22% 70%,25% 40%,28% 90%,31% 25%,34% 60%,37% 15%,40% 55%,43% 80%,46% 35%,49% 70%,52% 25%,55% 60%,58% 40%,61% 75%,64% 25%,67% 65%,70% 35%,73% 70%,76% 20%,79% 55%,82% 40%,85% 65%,88% 30%,91% 60%,94% 15%,97% 50%,100% 0%);
 }
 
-/* Page text — CAVEAT handwriting font */
+/* ── PAGE TEXT ── */
 .page-text {
   font-family: 'Caveat', cursive;
-  font-size: clamp(17px, 4.2vw, 21px);
+  font-size: clamp(16px, 3.8vw, 20px);
   font-weight: 500;
   color: var(--ink);
-  line-height: 2.0;
+  line-height: var(--line-h);
   position: relative; z-index: 1;
 }
 
 .page-date {
-  font-family: 'Caveat', cursive;
-  font-weight: 700;
-  font-size: clamp(20px, 5.5vw, 27px);
-  color: var(--ink); line-height: 1.25; margin-bottom: 4px;
+  font-family: 'Caveat', cursive; font-weight: 700;
+  font-size: clamp(19px, 5vw, 25px);
+  color: var(--ink); line-height: 1.3; margin-bottom: 2px;
 }
 .page-date-sub {
   font-family: 'IM Fell English', serif; font-style: italic;
   font-size: 11px; color: var(--ink-fade); letter-spacing: .1em;
-  margin-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,.07); padding-bottom: 8px;
+  margin-bottom: 18px; border-bottom: 1px solid rgba(0,0,0,.07); padding-bottom: 6px;
 }
 
-.page-text p { margin-bottom: 0; min-height: 1em; }
-.page-text p.blank { height: 1.8em; }
+.page-text p { margin-bottom: 0; min-height: calc(var(--line-h) * 0.55); }
+.page-text p.blank { height: calc(var(--line-h) * 0.9); }
 
 hr.page-divider {
-  border: none; height: 1px; margin: 16px 0;
+  border: none; height: 1px; margin: 10px 0;
   background: linear-gradient(90deg, transparent, var(--ink-faint), transparent);
   opacity: .38; position: relative; z-index: 1;
 }
 
+/* ── INLINE TEXT STYLES (ref image) ── */
+/* Strikethrough — whole line or inline */
+.strike { text-decoration: line-through; opacity: .65; font-style: italic; }
+/* Red bold italic — important/emphasis */
+.red-bold { color: var(--red-ink); font-weight: 700; font-style: italic; }
+/* Underline */
+.underline { text-decoration: underline; text-underline-offset: 3px; }
+
 /* Illustration */
-.page-illustration {
-  margin: 12px 0 6px; display: flex; justify-content: flex-end;
-  position: relative; z-index: 1;
-}
+.page-illustration { margin: 10px 0 4px; display: flex; justify-content: flex-end; position: relative; z-index: 1; }
 .page-illustration.left  { justify-content: flex-start; }
 .page-illustration.center { justify-content: center; }
 .illustration-wrap { position: relative; display: inline-block; }
-.illust-svg-wrap {
-  max-width: 200px; opacity: 0;
-  mix-blend-mode: multiply;
-  filter: sepia(.25) contrast(.9) brightness(1.06);
-  transition: opacity .9s ease;
-}
+.illust-svg-wrap { max-width: 200px; opacity: 0; mix-blend-mode: multiply; filter: sepia(.25) contrast(.9) brightness(1.06); transition: opacity .9s ease; }
 .illust-svg-wrap.loaded { opacity: .85; }
-.illustration-caption {
-  font-family: 'Caveat', cursive; font-size: 13px;
-  color: var(--ink-fade); text-align: center; margin-top: 2px; font-style: italic;
-}
+.illustration-caption { font-family: 'Caveat', cursive; font-size: 13px; color: var(--ink-fade); text-align: center; margin-top: 2px; font-style: italic; }
 .illustration-loading {
-  width: 140px; height: 100px; display: flex; align-items: center;
+  width: 140px; height: 90px; display: flex; align-items: center;
   justify-content: center; flex-direction: column; gap: 6px;
   border: 1px dashed var(--ink-faint); border-radius: 3px; opacity: .4;
 }
@@ -348,11 +304,8 @@ hr.page-divider {
   font-size: 15px; color: var(--ink-faint);
 }
 
-/* Page navigation arrows */
-.page-nav {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 16px 0;
-}
+/* Page nav */
+.page-nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 0; }
 .page-nav-btn {
   display: flex; align-items: center; gap: 6px;
   background: none; border: none; cursor: pointer;
@@ -362,47 +315,70 @@ hr.page-divider {
   transition: all .2s; -webkit-tap-highlight-color: transparent;
   min-width: 80px; min-height: 44px;
 }
-.page-nav-btn:hover, .page-nav-btn:active {
-  color: var(--gold-light); background: rgba(180,140,50,.06);
-}
+.page-nav-btn:hover, .page-nav-btn:active { color: var(--gold-light); background: rgba(180,140,50,.06); }
 .page-nav-btn:disabled { opacity: 0; pointer-events: none; }
 .page-nav-btn.prev::before { content: '‹'; font-size: 20px; }
 .page-nav-btn.next::after  { content: '›'; font-size: 20px; }
 
-/* ── MUSIC TOGGLE ── */
-#musicToggle {
-  position: fixed; bottom: 20px; right: 20px; z-index: 100;
-  background: rgba(20,14,9,.82); border: 1px solid rgba(180,140,50,.22);
-  border-radius: 50%; width: 38px; height: 38px; display: none;
-  align-items: center; justify-content: center; cursor: pointer;
-  font-size: 15px; color: rgba(180,140,50,.55); transition: all .2s;
-  backdrop-filter: blur(4px); -webkit-tap-highlight-color: transparent;
+/* ── MUTE BUTTON (only shown after music starts) ── */
+#muteBtn {
+  position: fixed; bottom: 18px; right: 18px; z-index: 200;
+  background: rgba(20,14,9,.75); border: 1px solid rgba(180,140,50,.18);
+  border-radius: 50%; width: 34px; height: 34px;
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: rgba(180,140,50,.5);
+  transition: all .2s; backdrop-filter: blur(4px);
+  -webkit-tap-highlight-color: transparent;
 }
-#musicToggle:hover { border-color: rgba(180,140,50,.6); color: var(--gold-light); }
-#musicToggle.show { display: flex; }
+#muteBtn.show { display: flex; }
+#muteBtn:hover { border-color: rgba(180,140,50,.5); color: var(--gold-light); }
+#muteBtn.muted { opacity: .45; }
 
-/* ── MOBILE ── */
+/* ── MOBILE PORTRAIT ── */
 @media (max-width: 520px) {
+  :root { --line-h: 30px; }
   .notebook-page {
-    padding: 40px 18px 64px 60px;
+    padding: 36px 14px 60px 56px;
     background-image:
-      linear-gradient(90deg, transparent 50px, var(--margin-red) 50px, var(--margin-red) 52px, transparent 52px),
-      repeating-linear-gradient(transparent, transparent 31px, var(--line-blue) 31px, var(--line-blue) 32px);
+      linear-gradient(90deg, transparent 46px, var(--margin-red) 46px, var(--margin-red) 48px, transparent 48px),
+      repeating-linear-gradient(transparent, transparent calc(var(--line-h) - 1px), var(--line-blue) calc(var(--line-h) - 1px), var(--line-blue) var(--line-h));
     border-radius: 0 2px 2px 0;
   }
-  .page-text { font-size: clamp(16px, 4.8vw, 20px); line-height: 1.95; }
+  .page-text { font-size: clamp(15px, 4.5vw, 18px); }
   .page-stack::before, .page-stack::after { display: none; }
-  #pageView { padding: 12px 0 80px; }
+  #pageView { padding: 10px 0 70px; }
   .page-wrap { max-width: 100%; }
-  .page-topbar { padding: 0 12px 10px; }
+  .page-topbar { padding: 0 10px 8px; }
+}
+
+/* ── MOBILE LANDSCAPE ── */
+@media (orientation: landscape) and (max-height: 520px) {
+  :root { --line-h: 28px; }
+  #calendarView { flex-direction: row; gap: 24px; padding: 16px; min-height: 100vh; }
+  .notebook { width: min(340px, 50vw); }
+  #pageView { padding: 8px 0 20px; }
+  .page-topbar { padding: 0 10px 6px; }
+  .notebook-page {
+    padding: 28px 14px 52px 52px;
+    min-height: unset;
+    background-image:
+      linear-gradient(90deg, transparent 42px, var(--margin-red) 42px, var(--margin-red) 44px, transparent 44px),
+      repeating-linear-gradient(transparent, transparent calc(var(--line-h) - 1px), var(--line-blue) calc(var(--line-h) - 1px), var(--line-blue) var(--line-h));
+  }
+  .page-text { font-size: clamp(13px, 2.2vh, 16px); }
+  .page-date { font-size: clamp(15px, 2.8vh, 20px); }
+  .page-date-sub { margin-bottom: 10px; }
+  .page-stack::before, .page-stack::after { display: none; }
+  .page-nav { padding: 8px 10px 0; }
 }
 </style>
 </head>
 <body>
 
 <!-- BG MUSIC -->
-<audio id="bgMusic" src="jd-theme.mp3" loop preload="auto"></audio>
-<button id="musicToggle" title="Música">♪</button>
+<audio id="bgMusic"   src="jd-theme.mp3"   loop preload="auto"></audio>
+<audio id="flipAudio" src="page-turn.mp3"  preload="auto"></audio>
+<button id="muteBtn" title="Silenciar" aria-label="Silenciar música">♪</button>
 
 <!-- MAIN SITE -->
 <div id="mainSite">
@@ -463,7 +439,16 @@ hr.page-divider {
 </div>
 
 <script>
-/* ══════════════════════ ENTRIES ══════════════════════ */
+/* ════════════════════════════════════════
+   ENTRIES
+   Markup inline suportado nos parágrafos:
+     **texto**   → vermelho bold itálico
+     ~~texto~~   → tachado (strikethrough)
+     __texto__   → sublinhado
+   Linhas especiais:
+     "—"   → divisor horizontal
+     ""    → linha em branco
+════════════════════════════════════════ */
 const ENTRIES = {
   "2031-07-25": {
     time: "por volta das 22h",
@@ -488,11 +473,11 @@ const ENTRIES = {
       "",
       "A reação foi imediata, mas não na ação. Ele demorou para processar. A expressão mudou de neutra para surpresa e, em seguida, constrangimento. Desviou o olhar, evitou contato direto, apresentou sinais claros de desconforto com a situação.",
       "",
-      "Timidez.",
+      "**Timidez.**",
       "",
-      "Baixa assertividade.",
+      "**Baixa assertividade.**",
       "",
-      "Padrão previsível.",
+      "**Padrão previsível.**",
       "",
       "Ele aceitou.",
       "",
@@ -524,7 +509,7 @@ const ENTRIES = {
       "",
       "Neguei.",
       "",
-      "Sem explicação adicional.",
+      "~~Sem explicação adicional.~~",
       "",
       "A reação diminuiu gradualmente.",
       "",
@@ -538,7 +523,7 @@ const ENTRIES = {
       "",
       "Indivíduos ainda demonstram forte dependência de equivalência em interações simples. A ausência de troca direta gera desconforto maior do que a própria indecisão inicial.",
       "",
-      "Isso não é eficiente.",
+      "~~Isso não é eficiente.~~",
       "",
       "Mas é consistente.",
       "",
@@ -550,7 +535,7 @@ const ENTRIES = {
       "",
       "Ainda assim…",
       "",
-      "foi informativo."
+      "**foi informativo.**"
     ],
     illustration: {
       prompt: "Minimal watercolor and pencil sketch of two fish lying on a wooden market stall counter near the sea at night, warm sepia and pale blue tones, delicate hand-drawn diary style, soft and intimate, no text, no people",
@@ -560,7 +545,9 @@ const ENTRIES = {
   }
 };
 
-/* ══════════════════════ SORTED ENTRIES ══════════════════════ */
+/* ════════════════════════════════════════
+   SORTED ENTRIES
+════════════════════════════════════════ */
 function extractHour(t) {
   const m = (t||"").match(/(\d{1,2})[h:]/i);
   return m ? parseInt(m[1]) : 0;
@@ -577,69 +564,59 @@ function buildSorted() {
 }
 const SORTED = buildSorted();
 
-/* ══════════════════════ FLIP SOUND ══════════════════════ */
-let _actx = null;
-function flipSound() {
+/* ════════════════════════════════════════
+   FLIP SOUND — usa o MP3 real
+════════════════════════════════════════ */
+const flipAudio = document.getElementById('flipAudio');
+function playFlip() {
   try {
-    if (!_actx) _actx = new (window.AudioContext||window.webkitAudioContext)();
-    const ctx = _actx;
-    if (ctx.state === 'suspended') ctx.resume();
-    const sr  = ctx.sampleRate;
-    const n   = Math.floor(sr * 0.18);
-    const buf = ctx.createBuffer(1, n, sr);
-    const d   = buf.getChannelData(0);
-    for (let i=0;i<n;i++) {
-      const t   = i/n;
-      const env = (1-Math.exp(-t*80)) * Math.exp(-t*9);
-      d[i] = (Math.random()*2-1) * env * 0.55;
-    }
-    const src = ctx.createBufferSource(); src.buffer = buf;
-    const hpf = ctx.createBiquadFilter(); hpf.type='highpass'; hpf.frequency.value=800;
-    const bpf = ctx.createBiquadFilter(); bpf.type='bandpass'; bpf.frequency.value=3500; bpf.Q.value=0.6;
-    const g   = ctx.createGain(); g.gain.value=0.45;
-    src.connect(hpf); hpf.connect(bpf); bpf.connect(g); g.connect(ctx.destination);
-    src.start();
+    flipAudio.currentTime = 0;
+    flipAudio.volume = 0.7;
+    flipAudio.play().catch(() => {});
   } catch(e) {}
 }
 
-/* ══════════════════════ MUSIC ══════════════════════ */
-const bgMusic     = document.getElementById('bgMusic');
-const musicToggle = document.getElementById('musicToggle');
-let musicOn = false;
-musicToggle.classList.add('show');
+/* ════════════════════════════════════════
+   MUSIC — tenta autoplay, cai pra 1ª interação
+════════════════════════════════════════ */
+const bgMusic = document.getElementById('bgMusic');
+const muteBtn = document.getElementById('muteBtn');
+let muted = false;
 
-function startMusic() {
+function startMusicFade() {
   bgMusic.volume = 0;
-  bgMusic.play().then(() => {
-    musicOn = true;
-    musicToggle.textContent = '♪';
-    musicToggle.style.opacity = '1';
+  return bgMusic.play().then(() => {
+    muteBtn.classList.add('show');
     let v = 0;
-    const t = setInterval(() => { v=Math.min(0.42,v+0.02); bgMusic.volume=v; if(v>=0.42)clearInterval(t); }, 100);
-  }).catch(() => {});
+    const t = setInterval(() => { v=Math.min(0.42,v+0.018); bgMusic.volume=v; if(v>=0.42)clearInterval(t); }, 100);
+    return true;
+  });
 }
 
-// Start on very first user touch/click anywhere
-let _musicInit = false;
-function tryInitMusic() {
-  if (_musicInit) return;
-  _musicInit = true;
-  startMusic();
-}
-document.addEventListener('click',      tryInitMusic, { capture: true, once: true });
-document.addEventListener('touchstart', tryInitMusic, { capture: true, once: true, passive: true });
-
-musicToggle.addEventListener('click', () => {
-  if (!_musicInit) { tryInitMusic(); return; }
-  if (musicOn) {
-    bgMusic.pause(); musicOn=false;
-    musicToggle.textContent='♩'; musicToggle.style.opacity='.5';
-  } else {
-    startMusic();
-  }
+// Try autoplay immediately
+window.addEventListener('load', () => {
+  startMusicFade().catch(() => {
+    // Blocked — start on first interaction
+    function onFirst() {
+      startMusicFade().catch(() => {});
+      document.removeEventListener('click',      onFirst);
+      document.removeEventListener('touchstart', onFirst);
+    }
+    document.addEventListener('click',      onFirst, { capture: true });
+    document.addEventListener('touchstart', onFirst, { capture: true, passive: true });
+  });
 });
 
-/* ══════════════════════ CALENDAR ══════════════════════ */
+muteBtn.addEventListener('click', () => {
+  muted = !muted;
+  bgMusic.muted = muted;
+  muteBtn.textContent = muted ? '♩' : '♪';
+  muteBtn.classList.toggle('muted', muted);
+});
+
+/* ════════════════════════════════════════
+   CALENDAR
+════════════════════════════════════════ */
 const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
                 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 let cY=2031, cM=6;
@@ -658,7 +635,7 @@ function renderCal() {
     cell.textContent = d;
     if (ENTRIES[key]) {
       cell.classList.add('has-entry');
-      cell.addEventListener('click', () => showEntry(key));
+      cell.addEventListener('click', () => { playFlip(); showEntry(key); });
     }
     grid.appendChild(cell);
   }
@@ -666,31 +643,45 @@ function renderCal() {
 document.getElementById('prevMonth').addEventListener('click', () => { cM--; if(cM<0){cM=11;cY--;} renderCal(); });
 document.getElementById('nextMonth').addEventListener('click', () => { cM++; if(cM>11){cM=0;cY++;} renderCal(); });
 
-/* ══════════════════════ PAGE VIEW ══════════════════════ */
-const calView  = document.getElementById('calendarView');
-const pgView   = document.getElementById('pageView');
-const pgEl     = document.getElementById('notebookPage');
-const prevBtn  = document.getElementById('prevEntryBtn');
-const nextBtn  = document.getElementById('nextEntryBtn');
-const counter  = document.getElementById('entryCounter');
+/* ════════════════════════════════════════
+   INLINE MARKUP PARSER
+════════════════════════════════════════ */
+function parseInline(raw) {
+  // escape HTML
+  let s = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // **bold red italic**
+  s = s.replace(/\*\*(.+?)\*\*/g, '<span class="red-bold">$1</span>');
+  // ~~strikethrough~~
+  s = s.replace(/~~(.+?)~~/g, '<span class="strike">$1</span>');
+  // __underline__
+  s = s.replace(/__(.+?)__/g, '<span class="underline">$1</span>');
+  return s;
+}
+
+/* ════════════════════════════════════════
+   PAGE VIEW
+════════════════════════════════════════ */
+const calView = document.getElementById('calendarView');
+const pgView  = document.getElementById('pageView');
+const pgEl    = document.getElementById('notebookPage');
+const prevBtn = document.getElementById('prevEntryBtn');
+const nextBtn = document.getElementById('nextEntryBtn');
+const counter = document.getElementById('entryCounter');
 
 let curIdx = 0;
 let locked = false;
-
-const MONTHS_SHORT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
 function fmtDate(key) {
   const [y,m,d] = key.split('-');
   return parseInt(d)+' de '+MONTHS[parseInt(m)-1]+' de '+y;
 }
-function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function buildHTML(item) {
   const { dateKey, entry } = item;
   const mid = Math.floor(entry.paragraphs.length * 0.35);
   let h = `<div class="page-date">${fmtDate(dateKey)}</div>
-<div class="page-date-sub">${esc(entry.time||'')} &nbsp;·&nbsp; Não Autorizado</div>`;
-  entry.paragraphs.forEach((p,i) => {
+<div class="page-date-sub">${parseInline(entry.time||'')} &nbsp;·&nbsp; Não Autorizado</div>`;
+  entry.paragraphs.forEach((p, i) => {
     if (i===mid && entry.illustration) {
       const a = entry.illustration.align||'right';
       h += `<div class="page-illustration ${a}" id="illwrap-${dateKey}">
@@ -700,9 +691,9 @@ function buildHTML(item) {
     </div>
   </div></div>`;
     }
-    if (p==='—')       h += `<hr class="page-divider">`;
-    else if (p==='')   h += `<p class="blank"></p>`;
-    else               h += `<p>${esc(p)}</p>`;
+    if (p==='—')     h += `<hr class="page-divider">`;
+    else if (p==='') h += `<p class="blank"></p>`;
+    else             h += `<p>${parseInline(p)}</p>`;
   });
   const day = parseInt(dateKey.split('-')[2]);
   h += `<div class="wax-seal">J</div><div class="page-number">${day}</div>`;
@@ -722,21 +713,21 @@ async function goToIdx(idx, dir) {
   const html = buildHTML(SORTED[idx]);
   if (dir) {
     locked = true;
-    flipSound();
+    playFlip();
     const out = dir==='fwd' ? 'flip-out-fwd' : 'flip-out-back';
     const inn = dir==='fwd' ? 'flip-in-fwd'  : 'flip-in-back';
     pgEl.classList.add(out);
-    await new Promise(r => setTimeout(r,260));
+    await new Promise(r => setTimeout(r, 260));
     pgEl.classList.remove(out);
     pgEl.innerHTML = html;
     pgEl.classList.add(inn);
-    await new Promise(r => setTimeout(r,280));
+    await new Promise(r => setTimeout(r, 280));
     pgEl.classList.remove(inn);
     locked = false;
   } else {
     pgEl.innerHTML = html;
   }
-  window.scrollTo({top:0,behavior:'instant'});
+  window.scrollTo({ top:0, behavior:'instant' });
   const item = SORTED[idx];
   if (item.entry.illustration) genIllust(item.dateKey, item.entry.illustration);
 }
@@ -744,36 +735,37 @@ async function goToIdx(idx, dir) {
 function showEntry(key) {
   const idx = SORTED.findIndex(e => e.dateKey===key);
   if (idx<0) return;
-  calView.style.display  = 'none';
-  pgView.style.display   = 'flex';
+  calView.style.display = 'none';
+  pgView.style.display  = 'flex';
   goToIdx(idx, null);
 }
 
-prevBtn.addEventListener('click', () => goToIdx(curIdx-1,'back'));
-nextBtn.addEventListener('click', () => goToIdx(curIdx+1,'fwd'));
+prevBtn.addEventListener('click', () => goToIdx(curIdx-1, 'back'));
+nextBtn.addEventListener('click', () => goToIdx(curIdx+1, 'fwd'));
 document.getElementById('backBtn').addEventListener('click', () => {
   pgView.style.display  = 'none';
   calView.style.display = 'flex';
-  window.scrollTo({top:0,behavior:'instant'});
+  window.scrollTo({ top:0, behavior:'instant' });
 });
 
 // Swipe
 let swipeX = 0;
-pgEl.addEventListener('touchstart', e => { swipeX = e.changedTouches[0].clientX; }, {passive:true});
-pgEl.addEventListener('touchend',   e => {
+pgEl.addEventListener('touchstart', e => { swipeX = e.changedTouches[0].clientX; }, { passive:true });
+pgEl.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - swipeX;
   if (Math.abs(dx)<50) return;
   goToIdx(dx<0 ? curIdx+1 : curIdx-1, dx<0?'fwd':'back');
-}, {passive:true});
+}, { passive:true });
 
-/* ══════════════════════ ILLUSTRATION ══════════════════════ */
+/* ════════════════════════════════════════
+   ILLUSTRATION
+════════════════════════════════════════ */
 async function genIllust(key, illust) {
   const loadEl = document.getElementById('illload-'+key);
   if (!loadEl) return;
   try {
     const res  = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model:'claude-sonnet-4-20250514', max_tokens:1000,
         messages:[{role:'user',content:`You are a diary illustration generator. Respond ONLY with a valid JSON object — no markdown fences, no explanation.
@@ -787,21 +779,22 @@ Respond ONLY with: {"svg":"<svg xmlns='http://www.w3.org/2000/svg' width='220' h
     });
     const data = await res.json();
     const raw  = data?.content?.find(b=>b.type==='text')?.text||'';
-    let svg = '';
-    try { svg = JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim()).svg||''; }
+    let svg='';
+    try { svg=JSON.parse(raw.replace(/```json|```/g,'').trim()).svg||''; }
     catch { const m=raw.match(/<svg[\s\S]*?<\/svg>/i); if(m) svg=m[0]; }
     const el2 = document.getElementById('illload-'+key);
     if (!svg||!el2) { if(el2) el2.style.display='none'; return; }
-    const wrap = el2.parentElement;
-    const div  = document.createElement('div'); div.className='illust-svg-wrap'; div.innerHTML=svg;
+    const wrap=el2.parentElement;
+    const div=document.createElement('div'); div.className='illust-svg-wrap'; div.innerHTML=svg;
     wrap.replaceChild(div,el2);
     if (illust.caption) { const c=document.createElement('div'); c.className='illustration-caption'; c.textContent=illust.caption; wrap.appendChild(c); }
     requestAnimationFrame(()=>requestAnimationFrame(()=>div.classList.add('loaded')));
   } catch(e) { const el=document.getElementById('illload-'+key); if(el) el.style.display='none'; }
 }
 
-/* ══════════════════════ INIT ══════════════════════ */
-// pageView starts hidden via inline style
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
 pgView.style.display = 'none';
 renderCal();
 </script>
