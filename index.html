@@ -593,19 +593,16 @@ function startMusicFade() {
   });
 }
 
-// Try autoplay immediately
-window.addEventListener('load', () => {
-  startMusicFade().catch(() => {
-    // Blocked — start on first interaction
-    function onFirst() {
-      startMusicFade().catch(() => {});
-      document.removeEventListener('click',      onFirst);
-      document.removeEventListener('touchstart', onFirst);
-    }
-    document.addEventListener('click',      onFirst, { capture: true });
-    document.addEventListener('touchstart', onFirst, { capture: true, passive: true });
-  });
-});
+// Try autoplay on load; if blocked, start once on first interaction then never again
+let _musicDone = false;
+function initMusic() {
+  if (_musicDone) return;
+  _musicDone = true;
+  startMusicFade().catch(() => { _musicDone = false; }); // reset only if truly failed
+}
+window.addEventListener('load', initMusic);
+document.addEventListener('click',      () => initMusic(), { capture: true, passive: true });
+document.addEventListener('touchstart', () => initMusic(), { capture: true, passive: true });
 
 muteBtn.addEventListener('click', () => {
   muted = !muted;
@@ -713,7 +710,6 @@ async function goToIdx(idx, dir) {
   const html = buildHTML(SORTED[idx]);
   if (dir) {
     locked = true;
-    playFlip();
     const out = dir==='fwd' ? 'flip-out-fwd' : 'flip-out-back';
     const inn = dir==='fwd' ? 'flip-in-fwd'  : 'flip-in-back';
     pgEl.classList.add(out);
@@ -740,8 +736,8 @@ function showEntry(key) {
   goToIdx(idx, null);
 }
 
-prevBtn.addEventListener('click', () => goToIdx(curIdx-1, 'back'));
-nextBtn.addEventListener('click', () => goToIdx(curIdx+1, 'fwd'));
+prevBtn.addEventListener('click', () => { playFlip(); goToIdx(curIdx-1, 'back'); });
+nextBtn.addEventListener('click', () => { playFlip(); goToIdx(curIdx+1, 'fwd'); });
 document.getElementById('backBtn').addEventListener('click', () => {
   pgView.style.display  = 'none';
   calView.style.display = 'flex';
